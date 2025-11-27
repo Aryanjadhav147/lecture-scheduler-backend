@@ -8,8 +8,30 @@ const instructorRoutes = require('./routes/instructor');
 
 const app = express();
 
+// 1. DEFINE ALLOWED ORIGINS (Your Frontend URL)
+const allowedOrigins = [
+  'http://localhost:3000',                       // For local development
+  'https://lecture-scheduler.netlify.app'       // *** YOUR DEPLOYED FRONTEND URL ***
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allows requests with no origin (like mobile apps) and explicitly allowed origins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'), false);
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  // IMPORTANT: This explicitly allows the 'Authorization' header, which is sent with your token.
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
 // Middleware
-app.use(cors());
+// 2. APPLY CONFIGURED CORS MIDDLEWARE
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Database Connection
