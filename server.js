@@ -39,6 +39,12 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
+// --- ADDED DEFAULT ROUTE HANDLER ---
+app.get('/', (req, res) => {
+    res.json({ message: 'Lecture Scheduler Backend is running successfully. Access API endpoints at /api/...' });
+});
+// ------------------------------------
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
